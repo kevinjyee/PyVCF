@@ -555,7 +555,11 @@ class Reader(object):
         chrom = row[0]
         if self._prepend_chr:
             chrom = 'chr' + chrom
-        pos = int(row[1])
+
+        try:
+            pos = int(row[1])
+        except ValueError:
+            pos = None
 
         if row[2] != '.':
             ID = row[2]

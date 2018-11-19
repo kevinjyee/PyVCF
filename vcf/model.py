@@ -185,9 +185,14 @@ class _Record(object):
         self.INFO = INFO
         self.FORMAT = FORMAT
         #: zero-based, half-open start coordinate of ``REF``
-        self.start = self.POS - 1
+        if self.POS is None:
+            self.start = None
+            self.end = None
+        else:
+            self.start = self.POS - 1
+            self.end = self.start + len(self.REF)
         #: zero-based, half-open end coordinate of ``REF``
-        self.end = self.start + len(self.REF)
+
         #: list of alleles. [0] = REF, [1:] = ALTS
         self.alleles = [self.REF]
         self.alleles.extend(self.ALT)
@@ -220,12 +225,16 @@ class _Record(object):
 
 
     def _compute_coordinates_for_none_alt(self):
+        if self.POS is None:
+            return (None, None)
         start = self.POS - 1
         end = start + len(self.REF)
         return (start, end)
 
 
     def _compute_coordinates_for_snp(self):
+        if self.POS is None:
+            return (None, None)
         if len(self.REF) > 1:
             start = self.POS
             end = start + (len(self.REF) - 1)
@@ -236,6 +245,8 @@ class _Record(object):
 
 
     def _compute_coordinates_for_indel(self):
+        if self.POS is None:
+            return (None, None)
         if len(self.REF) > 1:
             start = self.POS
             end = start + (len(self.REF) - 1)
@@ -245,6 +256,8 @@ class _Record(object):
 
 
     def _compute_coordinates_for_sv(self):
+        if self.POS is None:
+            return (None, None)
         start = self.POS - 1
         end = start + len(self.REF)
         return (start, end)

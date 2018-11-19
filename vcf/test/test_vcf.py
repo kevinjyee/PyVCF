@@ -410,6 +410,14 @@ class TestBadInfoFields(unittest.TestCase):
         self.assertEquals(record.INFO['NOTEMPTY_N'], [1])
         pass
 
+class TestBadRecordFields(unittest.TestCase):
+    def test_parse(self):
+        reader = vcf.Reader(fh('bad-record-character.vcf'))
+        record = next(reader)
+        self.assertEquals(record.POS, None)
+        self.assertEquals(record.QUAL, None)
+        pass
+
 
 class TestParseMetaLine(unittest.TestCase):
     def test_parse(self):
@@ -1753,3 +1761,4 @@ suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestGATKMeta))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestUncalledGenotypes))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestStrelka))
 suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestBadInfoFields))
+suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestBadRecordFields))
